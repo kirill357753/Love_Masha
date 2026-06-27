@@ -3,485 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Приглашение для Маши ❤️</title>
+    <title>Вело-свидание с Машей</title>
+    <!-- Подключаем красивые шрифты Google Fonts и иконки FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&family=Marck+Script&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Декоративный фон с эффектом боке */
+        .bokeh-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.6;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(253, 203, 110, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 90% 10%, rgba(250, 177, 160, 0.3) 0%, transparent 35%),
+                radial-gradient(circle at 50% 80%, rgba(129, 236, 236, 0.2) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(255, 118, 117, 0.25) 0%, transparent 30%);
+            filter: blur(40px);
+        }
+
+        .screen {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
-            padding: 20px;
-            overflow-x: hidden;
+            padding: 30px 15px;
+            position: relative;
+            z-index: 2;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        /* Скрытие экранов */
+        .screen.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        /* === ПЕРВЫЙ ЭКРАН: Приглашение === */
+        #invitation-screen {
+            display: flex;
         }
 
         .card {
-            background: white;
-            padding: 35px 25px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(229, 56, 118, 0.15);
-            text-align: center;
-            max-width: 550px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 50px 35px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            max-width: 480px;
             width: 100%;
-            position: relative;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            transform: scale(1);
             transition: all 0.5s ease;
         }
 
-        .heart-icon {
-            font-size: 50px;
-            color: #ff477e;
-            margin-bottom: 15px;
-            animation: heartbeat 1.2s infinite;
+        .icon {
+            font-size: 56px;
+            margin-bottom: 25px;
+            display: inline-block;
+            animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            20% { transform: scale(1.1); }
-            40% { transform: scale(1); }
-            60% { transform: scale(1.15); }
-            80%, 100% { transform: scale(1); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
         }
 
         h1 {
-            color: #ff477e;
-            font-size: 26px;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            color: #ff477e;
-            font-size: 20px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        p {
-            color: #4a4a4a;
-            font-size: 17px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        /* Кнопки */
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            height: 50px;
-            position: relative;
-            margin-top: 25px;
-        }
-
-        button {
-            padding: 12px 35px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: transform 0.1s ease, background-color 0.2s ease;
-        }
-
-        #yesBtn {
-            background-color: #ff477e;
-            color: white;
-            box-shadow: 0 5px 15px rgba(255, 71, 126, 0.4);
-        }
-
-        #yesBtn:hover {
-            background-color: #ff1f60;
-            transform: scale(1.05);
-        }
-
-        #noBtn {
-            background-color: #f0f0f0;
-            color: #7a7a7a;
-            position: absolute;
-            left: calc(50% + 10px);
-        }
-
-        /* Страница 2 - Детали поездки */
-        #detailsPage {
-            display: none;
-            text-align: left;
-            animation: slideUp 0.6s ease forwards;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .success-banner {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 16px;
+            font-family: 'Comfortaa', sans-serif;
+            color: #2c3e50;
+            font-size: 32px;
             margin-bottom: 25px;
-            line-height: 1.4;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        /* Стилизация билета на автобус */
-        .ticket {
-            background: #fdf8f9;
-            border: 2px dashed #ffccd5;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
+        .message {
+            color: #4a5568;
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            text-align: left;
+            background: rgba(248, 250, 252, 0.8);
+            padding: 25px;
+            border-radius: 20px;
+            border-left: 5px solid #ff7675;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
         }
 
-        .ticket-route {
+        .buttons-container {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-weight: bold;
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 5px;
+            gap: 15px;
+            justify-content: center;
         }
 
-        .bus-number {
-            background: #ff477e;
+        .btn {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex: 1;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff7675 0%, #e84393 100%);
             color: white;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 14px;
+            box-shadow: 0 6px 20px rgba(255, 118, 117, 0.3);
         }
 
-        .ticket-carrier {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+        .btn-yes:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 118, 117, 0.4);
         }
 
-        .ticket-time-block {
-            display: flex;
-            justify-content: space-between;
+        .btn-no {
+            background-color: #f1f2f6;
+            color: #5a6b7c;
+            border: 1px solid #e4e7eb;
+        }
+
+        .btn-no:hover {
+            background-color: #e4e7eb;
+            color: #2c3e50;
+        }
+
+        /* === ВТОРОЙ ЭКРАН: Галерея воспоминаний === */
+        #gallery-screen {
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 15px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
         }
 
-        .time-point h3 {
-            font-size: 22px;
-            color: #111;
-        }
-
-        .time-point p {
-            font-size: 13px;
-            color: #666;
-            margin: 0;
-            line-height: 1.3;
-        }
-
-        .duration {
-            font-size: 14px;
-            color: #888;
-            position: relative;
+        .gallery-header {
             text-align: center;
-            flex-grow: 1;
-            margin: 0 15px;
+            margin-bottom: 40px;
         }
 
-        .duration::before {
-            content: '';
+        .gallery-title {
+            font-family: 'Marck Script', cursive;
+            font-size: 55px;
+            color: #d63031;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        /* Контейнер воспоминаний / Сетка с фото */
+        .moments-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            width: 100%;
+            max-width: 950px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .moments-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Фоторамки */
+        .photo-card {
+            background: white;
+            padding: 15px 15px 25px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Рамка 1: Тёплая деревянная/золотая рамка */
+        .frame-wood {
+            border: 14px solid #e1b12c;
+            border-image: linear-gradient(to bottom, #f39c12, #d35400) 10;
+            transform: rotate(-2deg);
+        }
+
+        /* Рамка 2: Тонкая золотая со светящейся звёздочкой */
+        .frame-gold {
+            border: 3px solid #f1c40f;
+            transform: rotate(2deg);
+        }
+        .frame-gold::before {
+            content: '✨';
             position: absolute;
-            bottom: -5px;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            z-index: 5;
+        }
+
+        /* Рамка 3: Классическая рамка-паспарту */
+        .frame-passepartout {
+            border: 1px solid #dcdde1;
+            padding: 20px 20px 30px 20px;
+            transform: rotate(-1.5deg);
+        }
+
+        /* Рамка 4: Винтажный полароид */
+        .frame-polaroid {
+            padding: 15px 15px 45px 15px;
+            border-radius: 2px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            transform: rotate(1.5deg);
+        }
+        .frame-polaroid::after {
+            content: '❤️';
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.03) rotate(0deg) !important;
+            z-index: 10;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        /* Оформление текста воспоминаний */
+        .romantic-text-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 950px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255,255,255,0.6);
+            text-align: center;
+            position: relative;
+        }
+
+        .romantic-text {
+            font-family: 'Marck Script', cursive;
+            font-size: 32px; /* Чуть увеличил для лучшей читаемости рукописного шрифта */
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        /* Декоративные иконки по бокам */
+        .decor-icon {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(214, 48, 49, 0.2);
+            pointer-events: none;
+        }
+
+        .decor-bike-1 { bottom: 40px; left: -80px; font-size: 70px; transform: rotate(10deg); opacity: 0.15; }
+        .decor-bike-2 { top: 200px; right: -90px; font-size: 65px; transform: rotate(-15deg); opacity: 0.15; }
+        .decor-heart-1 { top: 10%; left: -50px; }
+        .decor-heart-2 { bottom: 20%; right: -40px; }
+
+        @media (max-width: 1200px) {
+            .decor-icon { display: none; }
+        }
+
+        /* === ВСПЛЫВАЮЩЕЕ ОКНО (Модалка "Нет") === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background: #ccc;
+            height: 100%;
+            background: rgba(44, 62, 80, 0.5);
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            z-index: 1000;
         }
 
-        /* Раскрывающийся список остановок */
-        .route-toggle {
-            font-size: 13px;
-            color: #ff477e;
-            cursor: pointer;
+        .modal {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 24px;
+            max-width: 400px;
+            width: 90%;
             text-align: center;
-            text-decoration: underline;
-            margin-top: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: scale(0.85);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .route-details {
-            display: none;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #555;
-            border-top: 1px dashed #eee;
-            padding-top: 10px;
-            max-height: 150px;
-            overflow-y: auto;
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        .route-step {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
+        .modal-overlay.active .modal {
+            transform: scale(1);
         }
 
-        /* Погодный информер */
-        .weather-card {
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-            border-radius: 16px;
-            padding: 20px;
-            color: #0369a1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(3, 105, 161, 0.05);
+        .modal h3 {
+            font-family: 'Comfortaa', sans-serif;
+            color: #2c3e50;
+            margin-bottom: 18px;
+            font-size: 22px;
+            font-weight: 700;
         }
 
-        .weather-info h3 {
-            font-size: 18px;
-            margin-bottom: 5px;
-            color: #0c4a6e;
+        .modal p {
+            color: #5a6b7c;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
         }
 
-        .weather-info p {
-            font-size: 14px;
-            color: #0369a1;
-            margin: 0;
-        }
-
-        .weather-temps {
-            text-align: right;
-        }
-
-        .weather-day {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0c4a6e;
-        }
-
-        .weather-night {
-            font-size: 14px;
-            color: #0284c7;
-            margin-top: 2px;
-        }
-
-        /* Чек-лист вещей */
-        .checklist {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 16px;
-        }
-
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
+        .btn-close {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 15px;
-            color: #444;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: background 0.2s;
         }
 
-        .checklist-item input {
-            width: 18px;
-            height: 18px;
-            accent-color: #ff477e;
-            cursor: pointer;
+        .btn-close:hover {
+            background-color: #1a252f;
         }
 
-        .checklist-item input:checked + span {
-            text-decoration: line-through;
-            color: #aaa;
+        /* Эффект плавающих сердечек */
+        .floating-hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            color: rgba(255, 118, 117, 0.25);
+            font-size: 20px;
+            animation: floatUp 12s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="card" id="mainCard">
-        <!-- СТРАНИЦА 1: ПРИГЛАШЕНИЕ -->
-        <div id="invitePage">
-            <div class="heart-icon">❤️</div>
-            <h1>Привет, Маш!</h1>
-            <p>Долго думал, что бы придумать такое интересное, и вот... Приглашаю тебя на один денёк съездить в Рыбинск)) Да, мега неожиданно, но вот так. Думаю, будет весело, погуляем, проведём день вместе)</p>
-            <p>Я тебя очень люблю❤️! Ты бы хотела провести этот день со мной?</p>
+    <!-- Размытое боке -->
+    <div class="bokeh-background"></div>
+    
+    <!-- Парящие фоновые сердечки -->
+    <div class="floating-hearts-container" id="heartsContainer"></div>
+
+    <!-- ================= СТРАНИЦА 1: Приглашение ================= -->
+    <section class="screen" id="invitation-screen">
+        <div class="card">
+            <div class="icon">🚲✨</div>
+            <h1>Вело-свидание</h1>
             
-            <div class="btn-container" id="btnBlock">
-                <button id="yesBtn" onclick="acceptInvitation()">Да!</button>
-                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">Нет</button>
+            <div class="message">
+                 Маш, дай шанс. Знаю, что придурок, знаю... Люблю тебя правда очень сильно, и уважение к тебе есть. Тут тупости моей много. Давай завтра съездим на велосипедах чтото на подобие свидания и хорошо время проведем?
+            </div>
+
+            <div class="buttons-container">
+                <button class="btn btn-yes" onclick="answerYes()">Я согласна!</button>
+                <button class="btn btn-no" onclick="showModal()">Нет</button>
             </div>
         </div>
+    </section>
 
-        <!-- СТРАНИЦА 2: ДЕТАЛИ -->
-        <div id="detailsPage">
-            <div class="success-banner">Супер, про бронирование я напишу тебе отдельно чуть позже, чтобы решить точнее</div>
+    <!-- ================= СТРАНИЦА 2: Наши Моменты ================= -->
+    <section class="screen hidden" id="gallery-screen">
+        
+        <div class="gallery-header">
+            <h2 class="gallery-title">Маша, наши моменты ✨</h2>
+        </div>
+
+        <!-- Сетка с твоими фотографиями -->
+        <div class="moments-grid">
             
-            <h2>Наш транспорт</h2>
-            <div class="ticket">
-                <div class="ticket-route">
-                    <span>Ярославль — Рыбинск</span>
-                    <span class="bus-number">№ 500</span>
-                </div>
-                <div class="ticket-carrier">АО "Ярославское АТП" • Выезд: 9 июня</div>
-                
-                <div class="ticket-time-block">
-                    <div class="time-point" style="text-align: left;">
-                        <h3>12:30</h3>
-                        <p>Автостанция<br>Ярославль-Главный</p>
-                    </div>
-                    
-                    <div class="duration">1 ч 45 мин</div>
-                    
-                    <div class="time-point" style="text-align: right;">
-                        <h3>14:15</h3>
-                        <p>Рыбинск<br>автовокзал</p>
-                    </div>
-                </div>
-
-                <div class="route-toggle" onclick="toggleRoute()">Посмотреть остановки в пути ▽</div>
-                <div class="route-details" id="routeDetails">
-                    <div class="route-step"><span>Ярославль-Главный (Отпр.)</span> <span>12:30</span></div>
-                    <div class="route-step"><span>Областная онкобольница</span> <span>12:33</span></div>
-                    <div class="route-step"><span>Брагино, 14-й микрорайон</span> <span>12:44</span></div>
-                    <div class="route-step"><span>Тутаев, ул. Моторостроителей</span> <span>13:14</span></div>
-                    <div class="route-step"><span>Дюдьково, поворот</span> <span>13:39</span></div>
-                    <div class="route-step"><span>Корниловское</span> <span>13:43</span></div>
-                    <div class="route-step"><span>Октябрьский</span> <span>13:48</span></div>
-                    <div class="route-step"><span>Посёлок Ермаково</span> <span>13:55</span></div>
-                    <div class="route-step"><strong>Рыбинск, автовокзал (Приб.)</strong> <span><strong>14:15</strong></span></div>
-                </div>
+            <!-- Фото 1: В золотистой рамке -->
+            <div class="photo-card frame-gold">
+                <img src="photo_2026-06-27_23-44-12.jpg" alt="Момент 1">
             </div>
 
-            <h2>Погода в этот день</h2>
-            <div class="weather-card">
-                <div class="weather-info">
-                    <h3>9 июня • Рыбинск</h3>
-                    <p>Переменная облачность, без осадков </p>
-                    <p style="font-size: 12px; margin-top: 4px; opacity: 0.8;">У воды может быть ветрено</p>
-                </div>
-                <div class="weather-temps">
-                    <div class="weather-day">+22°C</div>
-                    <div class="weather-night">вечером: +15°C</div>
-                </div>
-            </div>
-          <h2>План на день</h2>
-            <div class="plan-box">
-                <div class="plan-item">
-                    <span>Можно зайти парк аттракционов</span>
-                </div>
-                <div class="plan-item">
-                    <span></span>
-                    <span>Погуляем по центру </span>
-                </div>
-                <div class="plan-item">
-                    <span></span>
-                    <span>А вообще на месте сориентируемся и вместе решим, куда ещё сходим или можно будет подумать в ближайщие дни)</span>
-                </div>
+            <!-- Фото 2: В деревянной рамке -->
+            <div class="photo-card frame-wood">
+                <img src="photo_2026-06-27_23-44-14.jpg" alt="Момент 2">
             </div>
 
-            <h2>Таакс, с собой возьми эт:</h2>
-            <div class="checklist">
-                <label class="checklist-item">
-                    <input type="checkbox">
-                    <span>Паспорт</span>
-                </label>
-                <label class="checklist-item">
-                    <input type="checkbox">
-                    <span>Телефон и Повербанк с зарядкой</span>
-                </label>
-                <label class="checklist-item">
-                    <input type="checkbox">
-                    <span>Карту</span>
-                </label>
-                <label class="checklist-item">
-                    <input type="checkbox">
-                    <span>Кофту на всякий случай, я её если что потаскаю </span>
-                </label>
-                <label class="checklist-item">
-                    <input type="checkbox">
-                    <span>Воду</span>
-                </label>
-                <label class="checklist-item">
-                    <input type="checkbox">
-                    <span>Себя, самое главное)</span>
-                </label>
+            <!-- Фото 3: Классическое паспарту -->
+            <div class="photo-card frame-passepartout">
+                <img src="photo_2026-06-27_23-44-16.jpg" alt="Момент 3">
             </div>
+
+            <!-- Фото 4: Полароид -->
+            <div class="photo-card frame-polaroid">
+                <img src="photo_2026-06-27_23-45-11.jpg" alt="Момент 4">
+            </div>
+
+        </div>
+
+        <!-- Текстовое послание -->
+        <div class="romantic-text-box">
+            <i class="fa-solid fa-bicycle decor-icon decor-bike-1"></i>
+            <i class="fa-solid fa-bicycle decor-icon decor-bike-2"></i>
+            <i class="fa-solid fa-heart decor-icon decor-heart-1" style="color: rgba(232, 67, 147, 0.3);"></i>
+            <i class="fa-solid fa-heart decor-icon decor-heart-2" style="color: rgba(232, 67, 147, 0.3);"></i>
+
+            <p class="romantic-text">
+                Я знаю, что мало времени осталось, но я хочу его провести всё с тобой. Да, многое подпортил, что-то исправил, но я не собираюсь сдаваться, ты мне правда очень дорога. Люблю тебя ❤️
+            </p>
+        </div>
+
+    </section>
+
+    <!-- Всплывающее окно для кнопки "Нет" -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3>Я всё понимаю...</h3>
+            <p>Насильно заставить не могу. Спасибо, что честно ответила.</p>
+            <button class="btn-close" onclick="closeModal()">Закрыть</button>
         </div>
     </div>
 
     <script>
-        const noBtn = document.getElementById('noBtn');
-        const invitePage = document.getElementById('invitePage');
-        const detailsPage = document.getElementById('detailsPage');
-
-        // Функция "убегания" кнопки Нет
-        function moveButton() {
-            noBtn.style.position = 'fixed';
-            const padding = 50;
-            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+        // Функция генерации фоновых сердечек
+        function createFloatingHearts() {
+            const container = document.getElementById('heartsContainer');
+            const heartSymbols = ['❤️', '💖', '✨', '🚲', '🌸'];
             
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-            
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
-        }
-
-        // Клик по кнопке Да
-        function acceptInvitation() {
-            invitePage.style.display = 'none';
-            if(noBtn) noBtn.style.display = 'none';
-            detailsPage.style.display = 'block';
-            createHeartsExplosion();
-        }
-
-        // Показ/скрытие остановок
-        function toggleRoute() {
-            const details = document.getElementById('routeDetails');
-            const toggleBtn = document.querySelector('.route-toggle');
-            if (details.style.display === 'block') {
-                details.style.display = 'none';
-                toggleBtn.innerText = 'Посмотреть остановки в пути ▽';
-            } else {
-                details.style.display = 'block';
-                toggleBtn.innerText = 'Скрыть остановки △';
-            }
-        }
-
-        // Эффект летящих сердечек
-        function createHeartsExplosion() {
-            for (let i = 0; i < 35; i++) {
+            setInterval(() => {
                 const heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.style.position = 'fixed';
-                heart.style.left = Math.random() * window.innerWidth + 'px';
-                heart.style.top = window.innerHeight + 'px';
-                heart.style.fontSize = Math.random() * (25 - 15) + 15 + 'px';
-                heart.style.transition = 'all ' + (Math.random() * 2 + 1.5) + 's ease-out';
-                heart.style.zIndex = '1000';
-                document.body.appendChild(heart);
-
-                setTimeout(() => {
-                    heart.style.transform = 'translateY(-' + (window.innerHeight + 100) + 'px) translateX(' + (Math.random() * 200 - 100) + 'px)';
-                    heart.style.opacity = '0';
-                }, 50);
-
+                heart.classList.add('floating-heart');
+                
+                heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                
+                container.appendChild(heart);
+                
                 setTimeout(() => {
                     heart.remove();
-                }, 3500);
-            }
+                }, 12000);
+            }, 800);
         }
+
+        createFloatingHearts();
+
+        // Логика согласия
+        function answerYes() {
+            const textMessage = "Привет! Я подумала и согласна на вело-свидание! 🚲✨";
+            const encodedText = encodeURIComponent(textMessage);
+            window.open(`https://t.me/K7rkum4?text=${encodedText}`, '_blank');
+
+            const invitationScreen = document.getElementById('invitation-screen');
+            const galleryScreen = document.getElementById('gallery-screen');
+
+            invitationScreen.style.opacity = '0';
+            invitationScreen.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                invitationScreen.classList.add('hidden');
+                galleryScreen.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    galleryScreen.style.opacity = '1';
+                    galleryScreen.style.transform = 'translateY(0)';
+                }, 50);
+            }, 800);
+        }
+
+        // Логика отказа
+        function showModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
     </script>
+
 </body>
 </html>
